@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  safe-browsing-service:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "9240:9240"
+    container_name: safe-browsing-service
+    entrypoint: go run /app/cmd/sbserver/main.go -apikey xxx -srvaddr 0.0.0.0:9240 -db db/list.db
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - nginx
+
+networks:
+  nginx:
+    name: nginx
